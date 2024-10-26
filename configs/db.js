@@ -20,4 +20,4 @@ conn.connect((err) => {
     }
 });
 // Export the connection object to be used in other modules
-module.exports = conn;
+module.exports = conn; 

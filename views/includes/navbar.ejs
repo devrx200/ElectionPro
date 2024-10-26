@@ -45,7 +45,7 @@
                      </div>
                      <div class="flex-grow-1">
                        <span class="fw-semibold d-block">John Doe</span>
-                       <small class="text-muted">Admin</small>
+                       <small class="text-muted text-capitalize"><strong><%= user.user_type %></strong></small>
                      </div>
                    </div>
                  </a>
@@ -54,34 +54,27 @@
                  <div class="dropdown-divider"></div>
                </li>
                <li>
-                 <a class="dropdown-item" href="#">
+                 <a class="dropdown-item" href="profile">
                    <i class="bx bx-user me-2"></i>
-                   <span class="align-middle">My Profile</span>
+                   <span class="align-middle">Profile</span>
                  </a>
                </li>
                <li>
-                 <a class="dropdown-item" href="#">
+                 <a class="dropdown-item" href="settings">
                    <i class="bx bx-cog me-2"></i>
                    <span class="align-middle">Settings</span>
                  </a>
                </li>
                <li>
-                 <a class="dropdown-item" href="#">
-                   <span class="d-flex align-items-center align-middle">
-                     <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                     <span class="flex-grow-1 align-middle">Billing</span>
-                     <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                   </span>
-                 </a>
                </li>
                <li>
                  <div class="dropdown-divider"></div>
                </li>
                <li>
-                 <a class="dropdown-item" href="auth-login-basic.html">
-                   <i class="bx bx-power-off me-2"></i>
-                   <span class="align-middle">Log Out</span>
-                 </a>
+                <a class="dropdown-item" href="#" id="logoutBtn">
+                  <i class="bx bx-power-off me-2"></i>
+                  <span class="align-middle">Log Out</span>
+                </a>
                </li>
              </ul>
            </li>
@@ -90,3 +83,60 @@
        </div>
      </nav>
      <!-- / Navbar -->
+
+    
+     <script>
+      document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default behavior of the anchor tag
+        
+        // Show confirmation dialog before logging out
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you really want to log out?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, log out!',
+          cancelButtonText: 'No, stay logged in'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // User clicked "Yes", proceed with logout
+            fetch('/api/auth/logout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'apikey': 'www.cbktechnologies.com' },
+              credentials: 'include' // Important to send cookies with the request
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Logged Out',
+                  text: data.message || 'You have been logged out successfully!',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  // Redirect to the login page
+                  window.location.href = '/'; 
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Logout Failed',
+                  text: data.message || 'Failed to log out. Please try again.',
+                });
+              }
+            })
+            .catch(() => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred during logout. Please try again.',
+              });
+            });
+          }
+        });
+      });
+    </script>
+    
+    

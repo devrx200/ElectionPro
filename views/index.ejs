@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
   data-template="vertical-menu-template-free">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+  <title><%= title %></title>
 
   <meta name="description" content="" />
 
@@ -31,7 +30,8 @@
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
+  <!-- sweetalert2  -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Page CSS -->
   <!-- Page -->
   <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
@@ -49,12 +49,11 @@
   <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
       <div class="authentication-inner">
-        <!-- Register -->
         <div class="card">
           <div class="card-body">
             <!-- Logo -->
             <div class="app-brand justify-content-center">
-              <a href="index.html" class="app-brand-link gap-2">
+              <a href="/" class="app-brand-link gap-2">
                 <span class="app-brand-logo demo">
                   <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -99,60 +98,122 @@
                     </g>
                   </svg>
                 </span>
-                <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                <span class="app-brand-text demo text-body fw-bolder text-capitalize">ElectionPro</span>
               </a>
             </div>
             <!-- /Logo -->
-            <h4 class="mb-2">Welcome to Sneat! 👋</h4>
-            <p class="mb-4">Please sign-in to your account and start the adventure</p>
-
-            <form id="formAuthentication" class="mb-3" action="/lty" method="POST">
+            <form id="formAuthentication" class="mb-3" action="/api/auth/login" method="POST">
               <div class="mb-3">
-                <label for="email" class="form-label">Email or Username</label>
-                <input type="text" class="form-control" id="email" name="email-username"
-                  placeholder="Enter your email or username" autofocus />
+                <label for="email" class="form-label fw-bold">Email or Username <sup
+                    class="fw-bold text-danger">*</sup></label>
+                <input type="text" class="form-control p-2 fw-bold fs-5" id="identifier" name="identifier"
+                  placeholder="Enter your email or username" autofocus required />
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
-                  <label class="form-label" for="password">Password</label>
-                  <a href="auth-forgot-password-basic.html">
-                    <small>Forgot Password?</small>
-                  </a>
+                  <label class="form-label fw-bold " for="password">Password <sup
+                      class="fw-bold text-danger">*</sup></label>
                 </div>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password" class="form-control" name="password"
-                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                    aria-describedby="password" />
+                  <input type="password" id="password" class="form-control  p-2 fw-bold fs-5" name="password"
+                    placeholder="Enter your password" aria-describedby="password" required />
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>
               </div>
-              <div class="mb-3">
+              <div class=" d-flex justify-content-between">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="remember-me" />
-                  <label class="form-check-label" for="remember-me"> Remember Me </label>
+                  <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" />
+                  <label class="form-check-label fw-bold" for="rememberMe"><small>Remember Me</small></label>
+                </div>
+                <div class="forgotpass">
+                  <p><a href="mailto:info@cbktechnologies.com" target="_blank" rel="noopener noreferrer"><small
+                        class=" fw-bold">Forgot Password?</small></a></p>
                 </div>
               </div>
-              <div class="mb-3">
-                <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+              <div class="mb-3 mt-1">
+                <button class="btn btn-primary btn-outline-success d-grid w-100 fw-bold p-2 border-1 border-white"
+                  name="Login" type="submit">Sign in</button>
               </div>
             </form>
-
-            <p class="text-center">
-              <span>New on our platform?</span>
-              <a href="auth-register-basic.html">
-                <span>Create an account</span>
-              </a>
-            </p>
           </div>
         </div>
-        <!-- /Register -->
+
       </div>
     </div>
   </div>
 
   <!-- / Content -->
 
-
+  <!-- Call Api  -->
+  <script>
+    document.getElementById('formAuthentication').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the default form submission
+  
+      const identifier = document.getElementById('identifier').value;
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked; // Capture the state of the "Remember Me" checkbox
+  
+      // Send login request
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'apikey': 'www.cbktechnologies.com'
+        },
+        body: JSON.stringify({ identifier, password, rememberMe }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle successful login for admin or superadmin
+        if (data.token && data.user && (data.user.user_type === 'admin' || data.user.user_type === 'superadmin')) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful',
+            text: data.message || 'You have logged in successfully!',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            // Reset the form after successful login
+            document.getElementById('formAuthentication').reset();
+            // Redirect based on user type
+            const redirectUrl = data.user.user_type === 'admin' ? '/admin/dashboard' : '/superadmin/dashboard';
+            window.location.href = redirectUrl;
+          });
+        }
+        // Handle login attempt by a regular user
+        else if (data.user && data.user.user_type === 'user') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Login Failed',
+            text: 'This platform is for admin access only. Please use the mobile application for user access.',
+          });
+          // Reset the form
+          document.getElementById('formAuthentication').reset();
+        }
+        // Handle failed login attempt
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: data.message || 'Invalid Credentials. Please try again.',
+          });
+          // Reset the form
+          document.getElementById('formAuthentication').reset();
+        }
+      })
+      .catch((error) => {
+        // Handle any other errors (e.g., network issues, server errors)
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred. Please try again later.',
+        });
+        // Reset the form (optional in case of network error)
+        document.getElementById('formAuthentication').reset();
+        console.error("Error during login request:", error);
+      });
+    });
+  </script>
+  
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
