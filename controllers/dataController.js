@@ -20,14 +20,12 @@ const load = async (req, res) => {
 
 // Search Data From Input Any Values
 const search = async (req, res) => {
-const { keyword } = req.body; // Get search term from the request body
+  const { keyword = '' } = req.body; // Get search term or default to an empty string
   console.log(keyword);
   try {
-    const data = await Data.search(keyword); // Use the search term in the query
+    const data = await Data.search(keyword); // Pass the keyword to the model
     if (data.length > 0) {
-      res
-        .status(200)
-        .json({ success: "true", message: "Search Data Retrieved Successfully", data: data });
+      res.status(200).json({ success: "true", message: "Search Data Retrieved Successfully", data });
     } else {
       res.status(404).json({ success: "false", message: "No Data Found..." });
     }
@@ -35,6 +33,7 @@ const { keyword } = req.body; // Get search term from the request body
     res.status(500).json({ success: "false", error: "Failed to Retrieve Data" });
   }
 };
+
 
 
 

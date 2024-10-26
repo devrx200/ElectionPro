@@ -14,49 +14,49 @@ class Data {
     });
   }
 
-// Search Data From Db Acording Input
+// Search Data From Db According to Input
 static search(keyword = '') {
-        return new Promise((resolve, reject) => {
-            // Define the base query
-            let query = 'SELECT * FROM electionpro';
-            let queryParams = [];
+  return new Promise((resolve, reject) => {
+    // Base query to select all records
+    let query = 'SELECT * FROM electionpro';
+    let queryParams = [];
 
-            // If a search term is provided, modify the query to search in all fields
-            if (keyword) {
-                query += ` WHERE 
-                    AC_NO LIKE ? OR
-                    PART_NO LIKE ? OR
-                    SECTION_NO LIKE ? OR
-                    SLNOINPART LIKE ? OR
-                    C_HOUSE_NO LIKE ? OR
-                    C_HOUSE_NO_V1 LIKE ? OR
-                    FM_NAME_EN LIKE ? OR
-                    LASTNAME_EN LIKE ? OR
-                    FM_NAME_V1 LIKE ? OR
-                    LASTNAME_V1 LIKE ? OR
-                    RLN_TYPE LIKE ? OR
-                    RLN_FM_NM_EN LIKE ? OR
-                    RLN_L_NM_EN LIKE ? OR
-                    RLN_FM_NM_V1 LIKE ? OR
-                    RLN_L_NM_V1 LIKE ? OR
-                    EPIC_NO LIKE ? OR
-                    GENDER LIKE ? OR
-                    AGE LIKE ? OR
-                    MOBILE_NO LIKE ?`;
+    // If a keyword is provided, update the query to filter by keyword
+    if (keyword) {
+      query += ` WHERE 
+        AC_NO LIKE ? OR
+        PART_NO LIKE ? OR
+        SECTION_NO LIKE ? OR
+        SLNOINPART LIKE ? OR
+        C_HOUSE_NO LIKE ? OR
+        C_HOUSE_NO_V1 LIKE ? OR
+        FM_NAME_EN LIKE ? OR
+        LASTNAME_EN LIKE ? OR
+        FM_NAME_V1 LIKE ? OR
+        LASTNAME_V1 LIKE ? OR
+        RLN_TYPE LIKE ? OR
+        RLN_FM_NM_EN LIKE ? OR
+        RLN_L_NM_EN LIKE ? OR
+        RLN_FM_NM_V1 LIKE ? OR
+        RLN_L_NM_V1 LIKE ? OR
+        EPIC_NO LIKE ? OR
+        GENDER LIKE ? OR
+        AGE LIKE ? OR
+        MOBILE_NO LIKE ?`;
 
-                // Add the search term to each field (with wildcards for partial matches)
-                queryParams = Array(19).fill(`%${keyword}%`);
-            }
-
-            // Execute the query
-            db.query(query, queryParams, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
+      // Add the search term with wildcards to each field
+      queryParams = Array(19).fill(`%${keyword}%`);
     }
+
+    // Execute the query
+    db.query(query, queryParams, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(results);
+    });
+  });
+}
 
 
 }
