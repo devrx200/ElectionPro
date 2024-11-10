@@ -1,11 +1,10 @@
 
 const express = require('express');
-const Auth = require('../controllers/authController');
+const SupAdmin = require('../controllers/superadminController');
 const router = express.Router();
 
-// Login endpoint
-router.post('/login',Auth.login);
-// Logout endpoint
-router.post('/logout',Auth.logout);
+//
+router.post('/users-list',SupAdmin.usersList);
+
 
 module.exports = router;

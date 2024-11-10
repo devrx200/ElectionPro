@@ -57,7 +57,7 @@
         <div class="menu-inner-shadow"></div>
 
     
-    <%// if (userRole === 'superadmin') { %>    
+    <% if (user.user_type === 'superadmin') { %>    
     <!-- Super Admin Manu -->
             <ul class="menu-inner py-1" id="side-menu-superadmin">
               <!-- Dashboard -->
@@ -133,14 +133,6 @@
                 </ul>
               </li>
             
-              <!-- Support -->
-              <li class="menu-item">
-                <a href="https://cbktechnologies.com/" target="_blank" class="menu-link">
-                  <i class="menu-icon tf-icons bx bx-support"></i>
-                  <div class="fw-bold" data-i18n="Support">Support</div>
-                </a>
-              </li>
-            
               <!-- Documentation -->
               <li class="menu-item">
                 <a href="https://cbktechnologies.com/" target="_blank" class="menu-link">
@@ -149,9 +141,9 @@
                 </a>
               </li>
             </ul>
-    <%// } %>
+    <% } %>
     
-    <%// if (userRole === 'admin') { %>  
+    <% if (user.user_type === 'admin') { %>  
     <!-- Admin Manu -->
           <ul class="menu-inner py-1" id="side-menu-admin">
             <!-- Dashboard -->
@@ -189,7 +181,7 @@
     
             <!-- Support -->
             <li class="menu-item">
-              <a href="https://cbktechnologies.com/" target="_blank" class="menu-link">
+              <a href="https://wa.me/+918103199911" target="_blank" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-support"></i>
                 <div class="fw-bold" data-i18n="Support">Support</div>
               </a>
@@ -203,7 +195,7 @@
               </a>
             </li>
           </ul>
-    <% //} %>
+    <% } %>
     
     <!-- User Manu -->
 

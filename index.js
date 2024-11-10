@@ -78,17 +78,6 @@ app.get("/superadmin/settings",isAuthenticated(['superadmin']), (req, res) => {
     res.render('superadmin/settings',{ title: 'Settings - Super Admin || Election Pro' });
 });
 
-// app.get("/superadmin/profile", (req, res) => {
-//   if (req.session.user && req.session.user.username) {
-//       const username = req.session.user.username;
-//       res.render('superadmin/profile', {sss:'hhhghjgh' ,title: username });
-//   } else {
-//       // Redirect to login or show an error if user is not logged in
-//       res.redirect('/login');
-//   }
-// });
-
-
 // ======================= Admin Routes For Frontend ================================
  app.get("/admin/dashboard",isAuthenticated(['admin']), (req, res) => {
     res.render('admin/dashboard',{ title: 'Admin - Dashboard || Election Pro' }); 
@@ -99,14 +88,18 @@ app.get('/admin', isAuthenticated(['admin']), (req, res) => {
   });
 
 //================== Api Routes For Web Only SuperAdmin & Admin //====================
-
+const superadminRoute = require('./routes/superadminRoute');
+app.use('/api/superadmin',apiKeyMiddleware,superadminRoute);
 
 //================== Api Routes For Both Web & App //====================
+const bothRoute = require('./routes/bothRoute');
+app.use('/api/all',apiKeyMiddleware, bothRoute);
+
 const authRoutes = require('./routes/authRoute');
 app.use('/api/auth', apiKeyMiddleware,authRoutes); // Login With Role Web+App
 
-const superadminRoute = require('./routes/superadminRoute');
-app.use('/api/superadmin',apiKeyMiddleware,superadminRoute);
+const dataRoutes = require('./routes/dataRoutes');
+app.use('/api/data',apiKeyMiddleware,dataRoutes); // All Data Load
 
 const adminRoute = require('./routes/adminRoute');
 app.use('/api/admin',apiKeyMiddleware,adminRoute);
@@ -116,8 +109,7 @@ app.use('/api/user',apiKeyMiddleware,userRoute);
 
 
 //================== Routes Api For Mobile Application //===================
-const dataRoutes = require('./routes/dataRoutes');
-app.use('/api/data',apiKeyMiddleware,dataRoutes); // All Data Load
+
 
 
 

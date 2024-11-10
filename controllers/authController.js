@@ -96,7 +96,7 @@ const login = async (req, res) => {
   }
 };
 
-// Logout Function
+// Logout Function  For All Users 
 const logout = (req, res) => {
   const userType = req.session.user ? req.session.user.user_type : null; // Get user user_type from session
   const username = req.session.user ? req.session.user.username : null; // Get username from session
@@ -117,16 +117,16 @@ const logout = (req, res) => {
 
     // Set the redirect URL based on the user user_type
     if (userType === "admin") {
-      redirectUrl = "/admin/login"; // Adjust to the actual admin login page
+      redirectUrl = "/"; // Adjust to the actual admin login page
     } else if (userType === "superadmin") {
-      redirectUrl = "/superadmin/login"; // Adjust to the actual superadmin login page
+      redirectUrl = "/"; // Adjust to the actual superadmin login page
     } else if (userType === "user") {
-      redirectUrl = "/user/dashboard"; // Adjust to the actual user dashboard
+      redirectUrl = "/"; // Adjust to the actual user dashboard
     }
 
     res.status(200).json({
       success: "true",
-      message: "Logout successful.",
+      message: "Logout Successfully...",
       redirect: redirectUrl, // Indicate where to redirect based on user_type
       user_type: userType, // Include user user_type in response
       username: username, // Include username in response
